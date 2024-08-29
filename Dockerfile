@@ -1,8 +1,8 @@
-FROM --platform=linux/amd64 python:3.10.13-slim
+FROM --platform=linux/amd64 python:3.12.5-slim
 # set work directory
 WORKDIR /usr/src
 
-# set environment varibles
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
