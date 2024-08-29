@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answers {
+            list-style: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        .answers input {
+            margin-right: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="quiz-container">
+            <h1>Quiz</h1>
+            <div id="question-container"></div>
+            <button class="button" id="next-button">Next</button>
+        </div>
+        <div id="result-container" style="display: none;">
+            <h1>Quiz Completed</h1>
+            <p id="score"></p>
+            <button class="button" onclick="location.reload()">Restart</button>
+        </div>
+    </div>
+    <script>
+        const quizId = "{{ quiz_id }}";
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questions = [];
+
+        const questionContainer = document.getElementById('question-container');
+        const nextButton = document.getElementById('next-button');
+        const resultContainer = document.getElementById('result-container');
+        const scoreElement = document.getElementById('score');
+
+        async function fetchQuestions() {
+            const response = await fetch(`/api/quiz/${quizId}/questions/`);
+            const data = await response.json();
+            questions = data;
+            showQuestion(questions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            questionContainer.innerHTML = `
+                <div class="question">${question.text}</div>
+                <ul class="answers">
+                    ${question.answers.map((answer, index) => `
+                        <li>
+                            <label>
+                                <input type="radio" name="answer" value="${index}">
+                                ${answer.text}
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        function showNextQuestion() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                const answerIndex = parseInt(selectedAnswer.value);
+                if (questions[currentQuestionIndex].answers[answerIndex].is_correct) {
+                    score++;
+                }
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion(questions[currentQuestionIndex]);
+                } else {
+                    showResult();
+                }
+            } else {
+                alert('Please select an answer.');
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            nextButton.style.display = 'none';
+            resultContainer.style.display = 'block';
+            scoreElement.textContent = `Your score: ${score} out of ${questions.length}`;
+        }
+
+        nextButton.addEventListener('click', showNextQuestion);
+
+        fetchQuestions();
+    </script>
+</body>
+</html>
