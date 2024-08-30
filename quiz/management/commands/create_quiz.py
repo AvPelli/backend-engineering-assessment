@@ -5,8 +5,8 @@ class Command(BaseCommand):
     help = 'Create a funny quiz'
 
     def handle(self, *args, **kwargs):
-        # generate 10 dummy quizzes
-        n = 10
+        # generate 2 dummy quizzes
+        n = 2
         for i in range(1,n+1):
 
             if Quiz.objects.filter(title='The Ultimate Fun Quiz' + str(i)).exists():

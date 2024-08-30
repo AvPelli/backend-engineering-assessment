@@ -19,13 +19,12 @@ username:admin
 password:admin
 
 
-During the first run 10 dummy quizzes are generated
-
+During the first run 2 dummy quizzes are generated
 
 ## API
 root url should be "http://localhost:8000/"
 
-/admin/: Admin site.
+/admin/: Admin site. All objects can be manually created here
 
 /quiz/{id}: Simple quiz page
 
