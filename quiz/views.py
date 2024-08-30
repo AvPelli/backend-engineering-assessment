@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +9,9 @@ from .serializers import QuizSerializer, QuestionSerializer, AnswerSerializer, P
 
 def quiz_view(request, id):
     return render(request, 'quiz.html', {'quiz_id': id})
+
+def redirect_to_participant_quizzes(request, user_id):
+    return redirect('quizzes', user_id=user_id)
 
 
 #Return data in JSON format by serializing objects -> these can be answers to API calls
@@ -34,3 +37,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
+
+    @action(detail=False, methods=['get'], url_path=r'(?P<user_id>\d+)/quizzes')
+    def get_user_quizzes(self, request, user_id=None):
+        user_quizzes = Participant.objects.filter(user_id=user_id)
+        serializer = self.get_serializer(user_quizzes, many=True)
+        return Response(serializer.data)
