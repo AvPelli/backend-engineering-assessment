@@ -39,6 +39,7 @@ root url should be "http://localhost:8000/"
 /api/quiz/{quiz_id}/questions/: (GET) quiz questions
 
 /api/participants/{user_id}/quizzes/: (GET) user's quizzes
+
 /quizzes/{user_id}: redirects to URL above^
 
 
