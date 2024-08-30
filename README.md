@@ -17,8 +17,11 @@ The run command script creates a super-user with username & password picked from
 
 
 ## API
+root url should be "http://localhost:8000/"
 
 /admin/: Admin site.
+
+/quiz/{id}: Simple quiz page
 
 /api/quiz/: List and create quizzes.
 
@@ -27,3 +30,12 @@ The run command script creates a super-user with username & password picked from
 /api/answers/: List and create answers.
 
 /api/participants/: List and create participants.
+
+/api/quiz/{quiz_id}/questions/: (GET) quiz questions
+
+/api/participants/{user_id}/quizzes/: (GET) user's quizzes
+/quizzes/{user_id}: redirects to URL above^
+
+
+## Running tests
+In docker container console run this command: "python manage.py test quiz.tests"
