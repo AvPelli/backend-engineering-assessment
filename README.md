@@ -14,6 +14,12 @@ Rebuild the container after adding any new packages
 ``` docker compose up --build```
 
 The run command script creates a super-user with username & password picked from `.env` file
+with the following credentials:
+username:admin
+password:admin
+
+
+During the first run 10 dummy quizzes are generated
 
 
 ## API
