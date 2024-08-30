@@ -34,12 +34,19 @@ class Answer(models.Model):
         db_table='answer'
 
 class Participant(models.Model):
+    STATUS_CHOICES = [
+        ('invited', 'Invited'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='invited')
 
     def __str__(self):
-        return f'{self.user.username} - {self.quiz.title}'
+        return f'{self.user.username} - {self.quiz.title} - {self.status}'
 
     class Meta:
         db_table='participant'
